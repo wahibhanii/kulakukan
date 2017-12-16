@@ -147,7 +147,7 @@ class UsersController {
       if (bcrypt.compareSync(req.body.password, userResult.password)){
         console.log('Login Success!')
         let payload = {
-          userDBId  : userResult._id,
+          _id  : userResult._id,
           userId    : userResult.userId,
           userName  : userResult.userName
         }
