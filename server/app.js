@@ -21,9 +21,7 @@ const app = express();
 const mongoose    = require('mongoose');
 const atlasdbURL  = `mongodb://wahibhacktiv8:${process.env.DB_PASSWORD}@wahib-hacktiv8-shard-00-00-uyl7c.mongodb.net:27017,wahib-hacktiv8-shard-00-01-uyl7c.mongodb.net:27017,wahib-hacktiv8-shard-00-02-uyl7c.mongodb.net:27017/kulakukan?ssl=true&replicaSet=wahib-hacktiv8-shard-0&authSource=admin`
 mongoose.connect(atlasdbURL,{ useMongoClient: true });
-
-
-
+mongoose.Promise = global.Promise;
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
