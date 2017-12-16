@@ -10,7 +10,7 @@ require('dotenv').config()
 // Routes
 const index       = require('./routes/index');
 const users       = require('./routes/users');
-const tasks        = require('./routes/tasks')
+const tasks       = require('./routes/tasks')
 const lists       = require('./routes/lists');
 const categories  = require('./routes/categories');
 
