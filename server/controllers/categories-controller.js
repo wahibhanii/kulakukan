@@ -54,11 +54,7 @@ class CategoriesController {
     Category.findOne({_id: req.params.id})
     .then(CategoryResult => {
       console.log(CategoryResult, req.body)
-      let newList = {
-        orderNo : CategoryResult.lists.length+1,
-        listId  : req.body.listId
-      }
-      CategoryResult.lists.push(newList)
+      CategoryResult.lists.push(req.body.listId)
       let newCategory = {
         catName : CategoryResult.catName,
         lists    : CategoryResult.lists
@@ -80,7 +76,7 @@ class CategoriesController {
   static removeList(req, res){
     Category.findOne({_id: req.params.id})
     .then(CategoryResult => {
-      CategoryResult.lists.splice(CategoryResult.lists.findIndex(lists => lists['listId'] === req.body.listId),1)
+      CategoryResult.lists.splice(CategoryResult.lists.indexOf(req.body.listId),1)
       let newCategory = {
         catName : CategoryResult.catName,
         lists    : CategoryResult.lists

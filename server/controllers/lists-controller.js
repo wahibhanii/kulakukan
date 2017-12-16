@@ -54,11 +54,7 @@ class ListsController {
     List.findOne({_id: req.params.id})
     .then(listResult => {
       console.log(listResult, req.body)
-      let newTask = {
-        orderNo : listResult.tasks.length+1,
-        taskId  : req.body.taskId
-      }
-      listResult.tasks.push(newTask)
+      listResult.tasks.push(req.body.taskId)
       let newList = {
         listName : listResult.listName,
         tasks    : listResult.tasks
@@ -80,7 +76,7 @@ class ListsController {
   static removeTask(req, res){
     List.findOne({_id: req.params.id})
     .then(listResult => {
-      listResult.tasks.splice(listResult.tasks.findIndex(tasks => tasks['taskId'] === req.body.taskId),1)
+      listResult.tasks.splice(listResult.tasks.indexOf(req.body.taskId),1)
       let newList = {
         listName : listResult.listName,
         tasks    : listResult.tasks
