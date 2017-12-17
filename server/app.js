@@ -16,6 +16,7 @@ const categories  = require('./routes/categories');
 
 
 const app = express();
+app.use(cors())
 
 // Mongo DB with Atlas server
 const mongoose    = require('mongoose');

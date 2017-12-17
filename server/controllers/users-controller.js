@@ -141,13 +141,13 @@ class UsersController {
   }
 
   static login(req, res){
-
+    console.log(req.body, '---------ini req')
     User.findOne({userId: req.body.userId})
     .then(userResult => {
       if (bcrypt.compareSync(req.body.password, userResult.password)){
         console.log('Login Success!')
         let payload = {
-          userDBId  : userResult._id,
+          _id  : userResult._id,
           userId    : userResult.userId,
           userName  : userResult.userName
         }
