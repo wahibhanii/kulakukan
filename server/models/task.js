@@ -8,7 +8,8 @@ const taskSchema = new Schema({
   createdAt   : Date,
   completedAt : Date,
   alarm       : Date,
-  tags        : [String]
+  tags        : [String],
+  owners      : [{type: Schema.Types.ObjectId, ref: 'User'}] 
 });
 
 

@@ -24,7 +24,8 @@ class TasksController {
       createdAt   : new Date(),
       completedAt : null,
       alarm       : Date(req.body.alarm),
-      tags        : req.body.tags
+      tags        : req.body.tags,
+      owners      : [req.headers.decoded._id]
     }
     Task.create(newTask)
     .then(result => {
@@ -78,6 +79,7 @@ class TasksController {
         completedAt : result.completedAt,
         alarm       : result.alarm,
         tags        : result.tags,
+        owners  : CategoryResult.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -104,6 +106,7 @@ class TasksController {
         completedAt : new Date(),
         alarm       : result.alarm,
         tags        : result.tags,
+        owners  : CategoryResult.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -130,6 +133,7 @@ class TasksController {
         completedAt : null,
         alarm       : result.alarm,
         tags        : result.tags,
+        owners  : CategoryResult.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -156,6 +160,7 @@ class TasksController {
         completedAt : result.completedAt,
         alarm       : result.alarm,
         tags        : req.body.tags,
+        owners  : CategoryResult.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
