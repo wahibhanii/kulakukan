@@ -26,7 +26,8 @@ class ListsController {
     .then(result => {
       res.status(200).json({
         message : 'Create new list success!',
-        data    : result
+        data    : result,
+        owners  : [req.headers.decoded._id]
       })
     })
     .catch(err => {
@@ -57,7 +58,8 @@ class ListsController {
       listResult.tasks.push(req.body.taskId)
       let newList = {
         listName : listResult.listName,
-        tasks    : listResult.tasks
+        tasks    : listResult.tasks,
+        owners   : CategoryResult.owners
       }
       return List.update({_id: req.params.id}, newList)
     })
@@ -79,7 +81,8 @@ class ListsController {
       listResult.tasks.splice(listResult.tasks.indexOf(req.body.taskId),1)
       let newList = {
         listName : listResult.listName,
-        tasks    : listResult.tasks
+        tasks    : listResult.tasks,
+        owners  : CategoryResult.owners
       }
       return List.update({_id: req.params.id}, newList)
     })
@@ -100,7 +103,8 @@ class ListsController {
     .then(listResult => {
       let newList = {
         listName : req.body.listName || listResult.listName,
-        tasks    : listResult.tasks
+        tasks    : listResult.tasks,
+        owners  : CategoryResult.owners
       }
       return List.update({_id: req.params.id}, newList)
     })

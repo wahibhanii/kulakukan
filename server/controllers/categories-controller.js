@@ -20,13 +20,14 @@ class CategoriesController {
   static createCategory(req, res){
     let newCategory = {
       catName  : req.body.catName,
-      lists     : []
+      lists    : [],
+      owners   : [req.headers.decoded._id]
     }
     Category.create(newCategory)
     .then(result => {
       res.status(200).json({
         message : 'Create new category success!',
-        data    : result
+        data    : result,
       })
     })
     .catch(err => {
@@ -57,7 +58,8 @@ class CategoriesController {
       CategoryResult.lists.push(req.body.listId)
       let newCategory = {
         catName : CategoryResult.catName,
-        lists    : CategoryResult.lists
+        lists   : CategoryResult.lists,
+        owners  : CategoryResult.owners
       }
       return Category.update({_id: req.params.id}, newCategory)
     })
@@ -79,7 +81,8 @@ class CategoriesController {
       CategoryResult.lists.splice(CategoryResult.lists.indexOf(req.body.listId),1)
       let newCategory = {
         catName : CategoryResult.catName,
-        lists    : CategoryResult.lists
+        lists    : CategoryResult.lists,
+        owners  : CategoryResult.owners
       }
       return Category.update({_id: req.params.id}, newCategory)
     })
@@ -100,7 +103,8 @@ class CategoriesController {
     .then(CategoryResult => {
       let newCategory = {
         catName : req.body.catName || CategoryResult.catName,
-        lists    : CategoryResult.lists
+        lists    : CategoryResult.lists,
+        owners  : CategoryResult.owners
       }
       return Category.update({_id: req.params.id}, newCategory)
     })
