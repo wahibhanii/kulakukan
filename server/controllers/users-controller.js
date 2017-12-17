@@ -141,7 +141,7 @@ class UsersController {
   }
 
   static login(req, res){
-
+    console.log(req.body, '---------ini req')
     User.findOne({userId: req.body.userId})
     .then(userResult => {
       if (bcrypt.compareSync(req.body.password, userResult.password)){
