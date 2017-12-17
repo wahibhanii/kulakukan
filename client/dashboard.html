@@ -1,73 +1,110 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Pure CSS Accordion Nav</title>
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Semantic Admin Web</title>
 
-  
-      <link rel="stylesheet" href="css/style.css">
-
-  
+  <link rel="stylesheet" href="css/w3.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="js/index.js"></script>
+  <script>
+    if (!window.localStorage.token) {
+      window.history.forward()
+      window.location.replace("./index.html")
+    }
+  </script>
 </head>
 
 <body>
-  
-<div class="left-menu">
-  <div class="logo"><i class="fa fa-align-justify"></i>
-    <div>Pure CSS Accordion Nav</div>
+  <div class="w3-bar w3-border gradient">
+    <a href="#" class="w3-bar-item w3-button">Home</a>
+    <a href="#" onclick="logout()" class="w3-bar-item w3-button w3-green w3-right">Logout</a>
   </div>
-  <div class="accordion">
-    <div class="section">
-      <input type="radio" name="accordion-1" id="section-1" checked="checked"/>
-      <label for="section-1"><span>Messages</span></label>
-      <div class="content">
-        <ul>
-          <li><i class="fa fa-inbox"></i><span>Inbox</span></li>
-          <li><i class="fa fa-share"></i><span>Sent    </span></li>
-          <li><i class="fa fa-archive"></i><span>Archive</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="section">
-      <input type="radio" name="accordion-1" id="section-2" value="toggle"/>
-      <label for="section-2"> <span>Usage</span></label>
-      <div class="content">
-        <ul>
-          <li><i class="fa fa-cog"></i><span>System</span></li>
-          <li><i class="fa fa-group"></i><span>Users    </span></li>
-          <li><i class="fa fa-sitemap"></i><span>Visitation</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="section">
-      <input type="radio" name="accordion-1" id="section-3" value="toggle"/>
-      <label for="section-3"> <span>Scroller</span></label>
-      <div class="content">
-        <ul>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee    </span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee    </span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee    </span></li>
-          <li><i class="fa fa-coffee"></i><span>Need Coffee</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="section">
-      <input type="radio" name="accordion-1" id="section-4" value="toggle"/>
-      <label for="section-4"> <span>Section 4</span></label>
-      <div class="content"></div>
-    </div>
-  </div>
-</div>
-  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
-    <script  src="js/index.js"></script>
+  <div class="w3-sidebar w3-bar-block w3-light-grey w3-card" style="width:160px;">
+    <h2>User Name</h2>
+    <!-- <a href="#" class="w3-bar-item w3-button">Link 1</a> -->
+    <button class="w3-button w3-block w3-left-align" onclick="myAccFunc(1)">
+      Category 1
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div id="demoAcc1" class="w3-hide w3-white w3-card">
+      <a href="#" class="w3-bar-item w3-button">List 1</a>
+      <a href="#" class="w3-bar-item w3-button">List 2</a>
+    </div>
+
+    <button class="w3-button w3-block w3-left-align" onclick="myAccFunc(2)">
+      Category 2
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div id="demoAcc2" class="w3-hide w3-white w3-card">
+      <a href="#" class="w3-bar-item w3-button">List A</a>
+      <a href="#" class="w3-bar-item w3-button">List B</a>
+    </div>
+
+    <!-- <a href="#" class="w3-bar-item w3-button">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button">Link 3</a> -->
+  </div>
+
+  <div class="w3-container" style="margin-left:160px">
+    <div>
+      <h2>To Do List Template</h2>
+      <p> This will be the template for to do list, and it's actions</p>
+      <ul>
+        <li>
+          <input type="checkbox" class="strikethrough" onclick=nowChecked(task1) id="task1">
+          <span>Task 1</span>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h2>Credits</h2>
+      <ul>
+        <li>
+          <p>Cool Elements and CSS By W3School</p>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  <footer>
+
+  </footer>
+  <script>
+    function nowChecked(thisId) {
+      console.log(thisId.checked)
+      // var a = thisId
+    }
+
+    function logout() {
+      console.log('masuk logout')
+      localStorage.removeItem('token')
+      window.location.replace("./index.html")
+    }
+
+    function myAccFunc(id) {
+      var x = document.getElementById(`demoAcc${id}`);
+      if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-green";
+      } else {
+        x.className = x.className.replace(" w3-show", "");
+        x.previousElementSibling.className =
+          x.previousElementSibling.className.replace(" w3-green", "");
+      }
+    }
+  </script>
+
+
 
 </body>
+
+
+
 </html>

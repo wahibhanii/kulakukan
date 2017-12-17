@@ -20,7 +20,9 @@ function sign_up() {
   }, 100);
   // document.querySelector('.link_forgot_pass').style.opacity = "0";
   // document.querySelector('.link_forgot_pass').style.top = "-5px";
-  document.querySelector('.btn_sign').innerHTML = "SIGN UP";
+  // document.querySelector('.btn_sign').innerHTML = "SIGN UP";
+  $('.btn_signup').removeClass('d_none')
+  $('.btn_sign').addClass('d_none')
   setTimeout(function () {
 
     // document.querySelector('.terms_and_cons').style.opacity = "1";
@@ -100,7 +102,8 @@ function sign_in() {
       }
     }
   }, 1500);
-  document.querySelector('.btn_sign').innerHTML = "SIGN IN";
+  $('.btn_signup').addClass('d_none')
+  $('.btn_sign').removeClass('d_none')
 }
 
 
