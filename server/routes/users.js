@@ -13,10 +13,10 @@ router.post('/', authentication, UsersController.createUser);
 // Delete User
 router.delete('/:id', authentication, UserAuth.userAuth, UsersController.deleteUser);
 
-// Add new task to the User
+// Add new Category to the User
 router.put('/:id/addcat', authentication, UserAuth.userAuth, UsersController.addCategory);
 
-// Remove task from the User
+// Remove Category from the User
 router.put('/:id/removecat', authentication, UserAuth.userAuth, UsersController.removeCategory);
 
 // Rename User
