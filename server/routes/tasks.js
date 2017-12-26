@@ -19,7 +19,7 @@ router.delete('/:id', authentication, UserAuth.taskAuth, TaskController.deleteTa
 // Edit description field on a tasks
 router.put('/:id/editdesc', authentication, UserAuth.taskAuth, TaskController.editDescription)
 
-// Edit description field on a tasks
+// Edit tags field on a tasks
 router.put('/:id/edittags', authentication, UserAuth.taskAuth, TaskController.editTags)
 
 // Mark task as complete
