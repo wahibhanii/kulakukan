@@ -33,10 +33,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/api/users', users);
-app.use('/api/tasks', tasks);
-app.use('/api/lists', lists);
-app.use('/api/categories', categories);
+app.use('/users', users);
+app.use('/tasks', tasks);
+app.use('/lists', lists);
+app.use('/categories', categories);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

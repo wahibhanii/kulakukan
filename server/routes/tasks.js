@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const TaskController = require('../controllers/tasks-controller')
-const authentication  = require('../controllers/authentication') 
-const UserAuth = require('../controllers/user-auth')
+const authentication  = require('../middleware/authentication') 
+const UserAuth = require('../middleware/user-auth')
 
 // Get all tasks
 router.get('/', authentication, UserAuth.taskAuth, TaskController.showAllTasks)

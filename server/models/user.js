@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  userId      : String,
+  email       : String,
   password    : String,
   userName    : String,
+  profPicUrl  : String,
   categories  : [{type: Schema.Types.ObjectId, ref: 'Category'}]
 });
 

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const CategoriesController = require('../controllers/categories-controller');
-const authentication  = require('../controllers/authentication') 
-const UserAuth = require('../controllers/user-auth')
+const authentication  = require('../middleware/authentication') 
+const UserAuth = require('../middleware/user-auth')
 // Find one category
 router.get('/:id', authentication, UserAuth.catAuth, CategoriesController.findOneCategory)
 
