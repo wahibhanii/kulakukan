@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const ListsController = require('../controllers/lists-controller');
-const authentication  = require('../controllers/authentication') 
-const UserAuth = require('../controllers/user-auth')
+const authentication  = require('../middleware/authentication') 
+const UserAuth = require('../middleware/user-auth')
 
 // Find one list
 router.get('/:id', authentication, UserAuth.listAuth, ListsController.findOneList)

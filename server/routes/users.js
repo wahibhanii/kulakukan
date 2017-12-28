@@ -1,14 +1,14 @@
 const express         = require('express');
 const router          = express.Router();
 const UsersController = require('../controllers/users-controller')
-const authentication  = require('../controllers/authentication') 
-const UserAuth = require('../controllers/user-auth')
+const authentication  = require('../middleware/authentication') 
+const UserAuth = require('../middleware/user-auth')
 
 // Find one user
 router.get('/:id', authentication, UserAuth.userAuth, UsersController.findOneUser)
 
 // Create new User / Signup
-router.post('/', authentication, UsersController.createUser);
+router.post('/', UsersController.createUser);
 
 // Delete User
 router.delete('/:id', authentication, UserAuth.userAuth, UsersController.deleteUser);
@@ -26,6 +26,6 @@ router.put('/:id/rename', authentication, UserAuth.userAuth, UsersController.ren
 router.post('/login', UsersController.login);
 
 // Facebook Login, returns access token
-// router.post('/fblogin', ) // upcoming feature
+router.post('/fblogin', UsersController.fblogin ) // upcoming feature
 
 module.exports = router;

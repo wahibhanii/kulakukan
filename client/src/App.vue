@@ -35,6 +35,7 @@
       </v-btn>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <facebook></facebook>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>menu</v-icon>
       </v-btn>
@@ -78,6 +79,9 @@
 </template>
 
 <script>
+  console.log('app vue scripts')
+  import facebook from './components/Facebook'
+
   export default {
     data () {
       return {
@@ -92,6 +96,13 @@
         rightDrawer: false,
         title: 'Vuetify.js'
       }
+    },
+
+    components: {
+      facebook
     }
+    
+
   }
+    
 </script>
