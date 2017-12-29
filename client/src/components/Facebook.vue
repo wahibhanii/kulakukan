@@ -1,7 +1,7 @@
 <template>
    <div 
     class="fb-login-button" 
-    data-max-rows="1" data-size="small" 
+    data-max-rows="1" data-size="large" 
     data-button-type="login_with" 
     data-show-faces="false" 
     data-auto-logout-link="true"
@@ -13,8 +13,9 @@
 </template>
 
 <script>
-const API_PATH="http://localhost:3000"
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
+import store from '../vuex/index'
 console.log('inside facebook!')
   export default {
     
@@ -25,13 +26,13 @@ console.log('inside facebook!')
     },
 
     methods: {
-      statusChangeCallback: (response) => {
+      statusChangeCallback (response) {
         console.log('this is statusChangeCallback')
         console.log(response)
-        console.log(API_PATH)
-        axios({
+        console.log(this.$axios)
+        this.$axios({
           method: 'post',
-          url: `${API_PATH}/users/fblogin`,
+          url: `users/fblogin`,
           data: {
             authResponse : response.authResponse
           }
@@ -39,6 +40,7 @@ console.log('inside facebook!')
         .then(loginResponse => {
           console.log('facebook login successful')
           localStorage.setItem('token', loginResponse.data.token)
+          this.$store.state.isFBLoggedIn = true
         })
         .catch(err => {
           console.log(err)
@@ -52,7 +54,7 @@ console.log('inside facebook!')
       //   });
       // }
     },
-    created: () => {
+    created () {
       window.fbAsyncInit = () => {
         FB.init({
           appId: '141574106544286',
@@ -63,7 +65,8 @@ console.log('inside facebook!')
 
         FB.AppEvents.logPageView();
         FB.getLoginStatus((response) => {
-          this.a.methods.statusChangeCallback(response)
+          console.log(this)
+          this.statusChangeCallback(response)
         })
       };
 
