@@ -34,14 +34,24 @@ class UsersController {
   }
 
   static createUser(req, res){
+    console.log(req.body, 'this is sign up body------------>>>>>')
     let newUser = {
-      email      : req.body.email,
+      email       : req.body.email,
       userName    : req.body.userName,
       password    : bcrypt.hashSync(req.body.password, salt),
       profPicUrl  : null,
       categories  : []
     }
-    User.create(newUser)
+    User.findOne({email: req.body.email})
+    .then(userResult => {
+      if (userResult === null){
+        return  User.create(newUser)
+      } else {
+        res.status(202).json({
+          message: 'email already in use, you may proceed with sign in'
+        })
+      }
+    })
     .then(result => {
       res.status(200).json({
         message : 'Create new User success!',
@@ -146,24 +156,34 @@ class UsersController {
     console.log(req.body, '---------ini req')
     User.findOne({email: req.body.email})
     .then(userResult => {
-      if (bcrypt.compareSync(req.body.password, userResult.password)){
-        console.log('Login Success!')
-        let payload = {
-          _id  : userResult._id,
-          email    : userResult.email,
-          userName  : userResult.userName
-        }
-        let token = jwt.sign(payload, process.env.JWT_SECRET_TOKEN);
-        res.status(200).json({
-          message : 'Login Success!',
-          data    : token
+      console.log(userResult, 'this is user result ------------------------')
+      if (userResult === null) {
+        console.log('User not found')
+        res.status(204).json({
+          message : 'User not found!',
+          isLoggedIn : false,
         })
-
       } else {
-        console.log('Wrong Password, login fail')
-        res.status(403).json({
-          message: 'Wrong Password, login fail'
-        })
+        if (bcrypt.compareSync(req.body.password, userResult.password)){
+          console.log('Login Success!')
+          let payload = {
+            _id  : userResult._id,
+            email    : userResult.email,
+            userName  : userResult.userName
+          }
+          let token = jwt.sign(payload, process.env.JWT_SECRET_TOKEN);
+          res.status(200).json({
+            message : 'Login Success!',
+            token    : token,
+            isLoggedIn : true,
+          })
+  
+        } else {
+          console.log('Wrong Password, login fail')
+          res.status(202).json({
+            message: 'Wrong Password, login fail'
+          })
+        }
       }
     })
     .catch(err => {
@@ -173,6 +193,7 @@ class UsersController {
   }
 
   static fblogin(req, res){
+    console.log('fblogin')
     console.log(req.body, ' ini req body------------ fb login...')
     FB.api(
       `/${req.body.authResponse.userID}`,

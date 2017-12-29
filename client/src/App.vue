@@ -24,22 +24,14 @@
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped" >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
+      <v-spacer></v-spacer>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <facebook></facebook>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
+        <v-icon>person_outline</v-icon>
       </v-btn>
     </v-toolbar>
+
     <v-content>
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
@@ -47,16 +39,19 @@
             <img src="/public/v.png" alt="Vuetify.js" class="mb-5" />
             <blockquote>
               &#8220;First, solve the problem. Then, write the code.&#8221;
+              
               <footer>
                 <small>
-                  <em>&mdash;John Johnson</em>
+                  <em>&mdash;John Johnson </em>
                 </small>
               </footer>
             </blockquote>
           </v-layout>
         </v-slide-y-transition>
       </v-container>
+      <div></div>
     </v-content>
+
     <v-navigation-drawer
       temporary
       :right="right"
@@ -68,7 +63,29 @@
           <v-list-tile-action>
             <v-icon>compare_arrows</v-icon>
           </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
+          <v-list-tile-title class="title">User Account</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile>
+          <v-divider></v-divider>
+        </v-list-tile>
+        <v-list-tile v-if="!isLoggedIn && !isFBLoggedIn">
+          <sign-in></sign-in>
+          <sign-up></sign-up>
+        </v-list-tile>
+        <v-list-tile v-if="!isLoggedIn">
+          <v-spacer></v-spacer>
+          <p>OR</p>
+          <v-spacer></v-spacer>
+        </v-list-tile>
+        <v-list-tile v-if="isLoggedIn">
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="logout()" ><v-icon class="blue--text">exit_to_app</v-icon> Log Out</v-btn>
+          <v-spacer></v-spacer>
+        </v-list-tile>
+        <v-list-tile v-if="!isLoggedIn">
+          <v-spacer></v-spacer>
+          <facebook></facebook>
+          <v-spacer></v-spacer>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
@@ -80,13 +97,16 @@
 
 <script>
   console.log('app vue scripts')
-  import facebook from './components/Facebook'
+  import Facebook from './components/Facebook'
+  import SignIn from './components/SignIn'
+  import SignUp from './components/SignUp'
+  import store from './vuex/index'
 
   export default {
     data () {
       return {
-        clipped: false,
-        drawer: true,
+        clipped: true,
+        drawer: false,
         fixed: false,
         items: [
           { icon: 'bubble_chart', title: 'Inspire' }
@@ -94,13 +114,36 @@
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'Vuetify.js'
+        title: 'kulakukan'
       }
     },
+    store,
 
     components: {
-      facebook
+      Facebook, SignIn, SignUp
+    },
+    methods: {
+      logout () {
+        localStorage.removeItem('token')
+        this.$store.state.isLoggedIn = false
+      }
+    },
+    computed: {
+      isLoggedIn () {
+        // console.log(this.$store.state.isLoggedIn, 'inithis.............')
+        
+        if (localStorage.token || this.$store.state.isFBLoggedIn ) {
+          this.$store.state.isLoggedIn = true
+        }
+        return this.$store.state.isLoggedIn
+      },
+
+      isFBLoggedIn () {
+
+        return this.$store.state.isFBLoggedIn
+      }
     }
+    
     
 
   }
