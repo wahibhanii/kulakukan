@@ -16,7 +16,6 @@
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import store from '../vuex/index'
-console.log('inside facebook!')
   export default {
     
     data(){
@@ -29,30 +28,30 @@ console.log('inside facebook!')
       statusChangeCallback (response) {
         console.log('this is statusChangeCallback')
         console.log(response)
-        console.log(this.$axios)
-        this.$axios({
-          method: 'post',
-          url: `users/fblogin`,
-          data: {
-            authResponse : response.authResponse
-          }
-        })
-        .then(loginResponse => {
-          console.log('facebook login successful')
-          localStorage.setItem('token', loginResponse.data.token)
-          this.$store.state.isFBLoggedIn = true
-        })
-        .catch(err => {
-          console.log(err)
-        })
-      },
-      // checkLoginState: () => {
-      //   console.log('this is checkloginState')
-      //   // console.log('ini this', this)
-      //   FB.getLoginStatus((response)=> {
-      //     statusChangeCallback(response);
-      //   });
-      // }
+        if (response.authResponse === undefined){
+            console.log('facebook not logged in')
+            localStorage.removeItem('token')
+            this.$store.state.isFBLoggedIn = false
+        } else {
+          this.$axios({
+            method: 'post',
+            url: `users/fblogin`,
+            data: {
+              authResponse : response.authResponse
+            }
+          })
+          .then(loginResponse => {
+            console.log('facebook login successful')
+            this.$store.state.isFBLoggedIn = true
+            localStorage.setItem('token', loginResponse.data.token)
+            this.$store.commit('setUserData')
+            
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        } 
+      }
     },
     created () {
       window.fbAsyncInit = () => {
@@ -65,7 +64,6 @@ console.log('inside facebook!')
 
         FB.AppEvents.logPageView();
         FB.getLoginStatus((response) => {
-          console.log(this)
           this.statusChangeCallback(response)
         })
       };

@@ -1,10 +1,11 @@
 const ObjectId    = require('mongodb').ObjectId;
 const List        = require('../models/list');
+const Category    = require('../models/category')
 
 class ListsController {
 
   static findOneList(req, res){
-    List.findOne({_id: req.params.id})
+    List.findOne({_id: req.params.id}).populate('tasks')
     .then(result => {
       res.status(200).json({
         message : 'Find list entry success!',
@@ -18,16 +19,34 @@ class ListsController {
   }
 
   static createList(req, res){
+    console.log('create list')
     let newList = {
       listName  : req.body.listName,
-      tasks     : []
+      tasks     : [],
+      owners    : [req.headers.decoded._id],
+      categories: [req.body.catId]
     }
+    let newListId
     List.create(newList)
+    .then(result => {
+      console.log(result)
+      newListId = result._id
+      return Category.findOne({_id: req.body.catId})
+    })
+    .then(categoryResult => {
+      categoryResult.lists.push(newListId)
+      let newCategory = {
+        catName : categoryResult.catName,
+        lists   : categoryResult.lists,
+        owners  : categoryResult.owners,
+        categories: categoryResult.categories
+      }
+      return Category.update({_id: req.body.catId}, newCategory)
+    })
     .then(result => {
       res.status(200).json({
         message : 'Create new list success!',
-        data    : result,
-        owners  : [req.headers.decoded._id]
+        data    : result
       })
     })
     .catch(err => {
@@ -59,7 +78,8 @@ class ListsController {
       let newList = {
         listName : listResult.listName,
         tasks    : listResult.tasks,
-        owners   : CategoryResult.owners
+        owners   : listResult.owners,
+        categories: listResult.categories
       }
       return List.update({_id: req.params.id}, newList)
     })
@@ -82,7 +102,8 @@ class ListsController {
       let newList = {
         listName : listResult.listName,
         tasks    : listResult.tasks,
-        owners  : CategoryResult.owners
+        owners   : listResult.owners,
+        categories: listResult.categories
       }
       return List.update({_id: req.params.id}, newList)
     })
@@ -104,7 +125,8 @@ class ListsController {
       let newList = {
         listName : req.body.listName || listResult.listName,
         tasks    : listResult.tasks,
-        owners  : CategoryResult.owners
+        owners   : listResult.owners,
+        categories: listResult.categories
       }
       return List.update({_id: req.params.id}, newList)
     })

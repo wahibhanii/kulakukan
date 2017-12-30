@@ -1,5 +1,6 @@
 const ObjectId    = require('mongodb').ObjectId;
 const Task        = require('../models/task');
+const List        =require('../models/list')
 
 class TasksController {
 
@@ -27,10 +28,30 @@ class TasksController {
       tags        : req.body.tags,
       owners      : [req.headers.decoded._id]
     }
+    let newTaskId
     Task.create(newTask)
     .then(result => {
+      // res.status(200).json({
+      //   message : 'Create new task success!',
+      //   data    : result
+      // })
+      newTaskId = result._id
+      return List.findOne({_id: req.body.listId})
+    })
+    .then(listResult => {
+      console.log(listResult, newTaskId)
+      listResult.tasks.push(newTaskId)
+      let newList = {
+        listName : listResult.listName,
+        tasks    : listResult.tasks,
+        owners   : listResult.owners,
+        categories: listResult.categories
+      }
+      return List.update({_id: req.body.listId}, newList)
+    })
+    .then(result => {
       res.status(200).json({
-        message : 'Create new task success!',
+        message : 'Adding task to list success!',
         data    : result
       })
     })
@@ -79,7 +100,7 @@ class TasksController {
         completedAt : result.completedAt,
         alarm       : result.alarm,
         tags        : result.tags,
-        owners  : CategoryResult.owners
+        owners      : result.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -106,7 +127,7 @@ class TasksController {
         completedAt : new Date(),
         alarm       : result.alarm,
         tags        : result.tags,
-        owners  : CategoryResult.owners
+        owners      : result.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -133,7 +154,7 @@ class TasksController {
         completedAt : null,
         alarm       : result.alarm,
         tags        : result.tags,
-        owners  : CategoryResult.owners
+        owners      : result.owners
       }
       return Task.update({_id: taskId}, newTask)
     })
@@ -160,7 +181,7 @@ class TasksController {
         completedAt : result.completedAt,
         alarm       : result.alarm,
         tags        : req.body.tags,
-        owners  : CategoryResult.owners
+        owners  : result.owners
       }
       return Task.update({_id: taskId}, newTask)
     })

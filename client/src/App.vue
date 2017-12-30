@@ -8,48 +8,42 @@
       app
     >
       <v-list>
-        <v-list-tile 
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
+        <v-list-tile @click="goHome">
           <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
+            <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
+        </v-list-tile>
+          <cat-nav></cat-nav>
+        <v-list-tile class="teal lighten-4 pt-3 pl-2">
+          <v-icon class="pr-3">create_new_folder</v-icon>
+          <v-text-field
+            label="Add new category"
+            v-model="newCatName"
+          ></v-text-field>
+          <v-btn flat icon color="blue" @click="addCategory">
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped" >
+
+    <v-toolbar fixed app :clipped-left="clipped" class="blue darken-2" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      
+      <v-toolbar-title v-text="title" class="hidden-xs-only"@click="getUserData"></v-toolbar-title>
+      <v-icon>playlist_add_check</v-icon>
       <v-spacer></v-spacer>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-toolbar-title>{{userName}}</v-toolbar-title>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>person_outline</v-icon>
       </v-btn>
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <img src="/public/v.png" alt="Vuetify.js" class="mb-5" />
-            <blockquote>
-              &#8220;First, solve the problem. Then, write the code.&#8221;
-              
-              <footer>
-                <small>
-                  <em>&mdash;John Johnson </em>
-                </small>
-              </footer>
-            </blockquote>
-          </v-layout>
-        </v-slide-y-transition>
-      </v-container>
-      <div></div>
+       <router-view :key="$route.fullPath"></router-view>
     </v-content>
 
     <v-navigation-drawer
@@ -72,7 +66,7 @@
           <sign-in></sign-in>
           <sign-up></sign-up>
         </v-list-tile>
-        <v-list-tile v-if="!isLoggedIn">
+        <v-list-tile v-if="!isFBLoggedIn && !isLoggedIn">
           <v-spacer></v-spacer>
           <p>OR</p>
           <v-spacer></v-spacer>
@@ -100,7 +94,10 @@
   import Facebook from './components/Facebook'
   import SignIn from './components/SignIn'
   import SignUp from './components/SignUp'
+  import CatNav from './components/CatNav'
   import store from './vuex/index'
+  import jwt from 'jsonwebtoken'
+  import axios from 'axios'
 
   export default {
     data () {
@@ -114,34 +111,83 @@
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'kulakukan'
+        title: '{ kulakukan }',
+        newCatName: null
       }
     },
     store,
 
     components: {
-      Facebook, SignIn, SignUp
+      Facebook, SignIn, SignUp, CatNav
     },
     methods: {
+      goHome (){
+        this.$router.push('/home')
+      },
       logout () {
         localStorage.removeItem('token')
         this.$store.state.isLoggedIn = false
+        location.reload()
+      },
+      getUserData () {
+        console.log('get user data . . . .')
+        let userId = jwt.decode(localStorage.token)._id
+        this.$axios({
+          method: 'get',
+          url: `users/${userId}`,
+          headers: {token: localStorage.token}
+        })
+        .then(response => {
+          this.$store.state.userData = response.data.data
+          console.log(this.$store.state.userData)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
+      addCategory () {
+        console.log(this.newCatName)
+        this.$axios({
+          method: 'post',
+          url: `categories/`,
+          data: {catName: this.newCatName},
+          headers: {token: localStorage.token}
+        })
+        .then(response => {
+          console.log(response)
+          this.newCatName = null
+          this.$store.commit('setUserData')
+        })
+        .catch(err => {
+          console.log(err)
+        })
       }
     },
     computed: {
       isLoggedIn () {
-        // console.log(this.$store.state.isLoggedIn, 'inithis.............')
-        
-        if (localStorage.token || this.$store.state.isFBLoggedIn ) {
-          this.$store.state.isLoggedIn = true
-        }
         return this.$store.state.isLoggedIn
       },
 
       isFBLoggedIn () {
-
         return this.$store.state.isFBLoggedIn
+      },
+
+      userName() {
+        if (this.$store.state.isFBLoggedIn || this.$store.state.isLoggedIn) {
+          let decoded = jwt.decode(localStorage.token)
+          return decoded.userName
+        } else {
+          return 'Guest'
+        }
       }
+    },
+    created () {
+      // this.getUserData()
+      console.log(this.$store)
+      this.$store.commit('setUserData')
+      // this.$router.go('/home')
+      console.log(this.$router, 'this router..........')
+      this.$router.push('/home')
     }
     
     
