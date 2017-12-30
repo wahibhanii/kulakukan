@@ -25,7 +25,6 @@
     computed:{
       lists () {
         let shownLists = this.$store.state.shownLists
-        console.log(shownLists,'=================')
         if (shownLists.listKey === undefined){
           return this.$store.state.userData.categories[shownLists.catKey].lists
         } else if (shownLists.listKey !== undefined) {
@@ -33,15 +32,6 @@
         }
       }
     },
-    // created () {
-    //    let shownLists = this.$store.state.shownLists
-    //     console.log(shownLists,'=================')
-    //     if (!shownLists.listKey){
-    //       this.lists = this.$store.state.userData.categories[shownLists.catKey].lists
-    //     } else {
-    //       this.lists = [this.$store.state.userData.categories[shownLists.catKey].lists[listKey]]
-    //     }
-    // } 
 
     
   }

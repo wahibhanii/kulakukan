@@ -26,6 +26,6 @@ router.put('/:id/edittags', authentication, UserAuth.taskAuth, TaskController.ed
 router.put('/:id/complete', authentication, UserAuth.taskAuth, TaskController.complete)
 
 // Mark task as outstanding
-router.put('/:id/uncomplete', TaskController.uncomplete)
+router.put('/:id/uncomplete', authentication, UserAuth.taskAuth, TaskController.uncomplete)
 
 module.exports = router;

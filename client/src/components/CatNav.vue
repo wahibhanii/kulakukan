@@ -28,10 +28,8 @@
     },
     methods: {
       showLists (catKey) {
-        console.log('SHOW LISTS ===============')
         this.$store.state.shownLists = {catKey:catKey }
         this.$router.push('/content')
-        console.log(this.$store.state.shownLists)
       },
       
     }

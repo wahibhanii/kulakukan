@@ -51,7 +51,6 @@
       showList (catKey, listKey) {
         this.$store.state.shownLists = {catKey: catKey, listKey : listKey}
         this.$router.push('/content')
-        console.log(this.$store.state.shownLists)
       },
       addList(newListName, catId) {
         console.log (newListName, catId)
