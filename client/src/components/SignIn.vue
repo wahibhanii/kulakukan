@@ -45,9 +45,6 @@ import axios from 'axios'
     methods : {
       save () {
         console.log('saving')
-        
-        console.log(this.$data.email)
-        console.log(this.$data.password)
         this.$axios({
           method: 'post',
           url: `/users/login`,
@@ -58,7 +55,6 @@ import axios from 'axios'
         })
         .then(loginResponse => {
           console.log('login...')
-          console.log(loginResponse)
           if (loginResponse.status === 200) {
             this.$data.dialog = false
             this.$data.email = null
@@ -75,8 +71,6 @@ import axios from 'axios'
             this.$data.failMessage = 'Wrong Password'
             this.$data.password = null
           }
-          
-          // localStorage.setItem('token', loginResponse.data.token)
         })
         .catch(err => {
           console.log(err)
