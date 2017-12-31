@@ -1,11 +1,12 @@
 var path = require('path')
 var webpack = require('webpack')
+var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    publicPath: './dist/',
     filename: 'build.js'
   },
   resolve: {
@@ -15,6 +16,10 @@ module.exports = {
       'public': path.resolve(__dirname, './public')
     }
   },
+  plugins: [
+        new CaseSensitivePathsPlugin()
+        // other plugins ...
+    ],
   module: {
     rules: [
       {
