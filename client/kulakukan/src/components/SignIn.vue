@@ -54,7 +54,7 @@ import axios from 'axios'
           }
         })
         .then(loginResponse => {
-          console.log('login...')
+          console.log('login...', loginResponse)
           if (loginResponse.status === 200) {
             this.$data.dialog = false
             this.$data.email = null
@@ -62,6 +62,8 @@ import axios from 'axios'
             this.$data.failMessage = null
             localStorage.setItem('token', loginResponse.data.token)
             this.$store.state.isLoggedIn = true
+            this.$store.commit('setUserData')
+            localStorage.setItem('normalLogin',true)
 
           } else if (loginResponse.status === 204) {
             this.$data.failMessage = 'User not Found'
