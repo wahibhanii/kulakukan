@@ -90,7 +90,6 @@
 </template>
 
 <script>
-  console.log('app vue scripts')
   import Facebook from './components/Facebook'
   import SignIn from './components/SignIn'
   import SignUp from './components/SignUp'
