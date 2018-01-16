@@ -30,7 +30,9 @@ import store from '../vuex/index'
         console.log(response)
         if (response.authResponse === undefined){
             console.log('facebook not logged in')
-            localStorage.removeItem('token')
+            if (localStorage.normalLogin == undefined){
+              localStorage.removeItem('token')
+            }
             this.$store.state.isFBLoggedIn = false
         } else {
           this.$axios({
@@ -43,7 +45,9 @@ import store from '../vuex/index'
           .then(loginResponse => {
             console.log('facebook login successful')
             this.$store.state.isFBLoggedIn = true
-            localStorage.setItem('token', loginResponse.data.token)
+            if (localStorage.token === undefined){
+              localStorage.setItem('token', loginResponse.data.token)
+            }
             this.$store.commit('setUserData')
             
           })

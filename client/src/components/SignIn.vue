@@ -8,14 +8,14 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-layout wrap>
+            <v-form v-model="valid">
               <v-flex xs12>
-                <v-text-field v-model="email" label="Email" required></v-text-field>
+                <v-text-field v-model="email" label="Email" required :rules="emailRules"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
+                <v-text-field v-model="password" label="Password" type="password" required :rules="passwordRules"></v-text-field>
               </v-flex>
-            </v-layout>
+            </v-form>
           </v-container>
           <small>*indicates required field</small> <br/>
           <p v-if="failMessage" class="text-xs-center red--text body-2">{{failMessage}}</p>
@@ -36,15 +36,22 @@ import axios from 'axios'
   export default {
     data () {
       return {
+        valid: false,
         dialog: false,
-        email:  null,
+        email: null,
+        emailRules: [
+          (v) => !!v || 'E-mail is required',
+          (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        ],
         password: null,
+        passwordRules: [
+          (v) => !!v || 'Password is required'
+        ],
         failMessage: null,
       }
     },
     methods : {
       save () {
-        console.log('saving')
         this.$axios({
           method: 'post',
           url: `/users/login`,
@@ -54,7 +61,6 @@ import axios from 'axios'
           }
         })
         .then(loginResponse => {
-          console.log('login...')
           if (loginResponse.status === 200) {
             this.$data.dialog = false
             this.$data.email = null
@@ -62,6 +68,8 @@ import axios from 'axios'
             this.$data.failMessage = null
             localStorage.setItem('token', loginResponse.data.token)
             this.$store.state.isLoggedIn = true
+            this.$store.commit('setUserData')
+            localStorage.setItem('normalLogin',true)
 
           } else if (loginResponse.status === 204) {
             this.$data.failMessage = 'User not Found'

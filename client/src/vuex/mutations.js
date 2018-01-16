@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken'
 import axios from 'axios'
-const baseURL = 'http://35.185.185.63:3000'
+const baseURL = 'http://35.186.166.229'
 const mutations = {
   setUserData () {
-    console.log('set user data . . . .')
     let userId = jwt.decode(localStorage.token)._id
     axios({
       method: 'get',
@@ -12,11 +11,16 @@ const mutations = {
     })
     .then(response => {
       this.state.userData = response.data.data
-      console.log(this.state.userData)
     })
     .catch(err => {
       console.log(err)
     })
+  },
+  setLoginStatus () {
+    if (localStorage.token && localStorage.normalLogin) {
+      this.state.isLoggedIn = true
+      this.commit('setUserData')
+    }
   }
 }
 
