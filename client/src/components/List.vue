@@ -55,7 +55,6 @@
     props: ['list'],
     methods : {
       addTask (listId, newTaskDesc) {
-        console.log(listId, newTaskDesc)
         let userId = jwt.decode(localStorage.token)._id
         this.$axios({
           method: 'post',
@@ -64,7 +63,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.$store.commit('setUserData')
           this.newTaskDesc = null
         })
@@ -73,7 +71,6 @@
         })
       },
       deleteTask (listId, taskId) {
-        console.log(listId, taskId)
         let userId = jwt.decode(localStorage.token)._id
         this.$axios({
           method: 'put',
@@ -82,7 +79,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.$store.commit('setUserData')
           this.newTaskDesc = null
         })
@@ -91,7 +87,6 @@
         })
       },
       checked (isComplete, taskId) {
-        console.log(isComplete,'========----=-=-=-==')
         if (isComplete === 'true') {
           this.$axios({
             method: 'put',
@@ -99,7 +94,6 @@
             headers: {token: localStorage.token}
           })
           .then(response => {
-            console.log(response)
             this.$store.commit('setUserData')
           })
           .catch(err => {
@@ -112,7 +106,6 @@
             headers: {token: localStorage.token}
           })
           .then(response => {
-            console.log(response)
             this.$store.commit('setUserData')
           })
           .catch(err => {

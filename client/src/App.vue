@@ -71,12 +71,12 @@
           <p>OR</p>
           <v-spacer></v-spacer>
         </v-list-tile>
-        <v-list-tile v-if="isLoggedIn">
+        <v-list-tile v-if="isLoggedIn && !isFBLoggedIn">
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click="logout()" ><v-icon class="blue--text">exit_to_app</v-icon> Log Out</v-btn>
           <v-spacer></v-spacer>
         </v-list-tile>
-        <v-list-tile v-if="!isLoggedIn">
+        <v-list-tile v-show="!isLoggedIn">
           <v-spacer></v-spacer>
           <facebook></facebook>
           <v-spacer></v-spacer>
@@ -126,11 +126,11 @@
       },
       logout () {
         localStorage.removeItem('token')
+        localStorage.removeItem('normalLogin')
         this.$store.state.isLoggedIn = false
         location.reload()
       },
       getUserData () {
-        console.log('get user data . . . .')
         let userId = jwt.decode(localStorage.token)._id
         this.$axios({
           method: 'get',
@@ -139,14 +139,12 @@
         })
         .then(response => {
           this.$store.state.userData = response.data.data
-          console.log(this.$store.state.userData)
         })
         .catch(err => {
           console.log(err)
         })
       },
       addCategory () {
-        console.log(this.newCatName)
         this.$axios({
           method: 'post',
           url: `categories/`,
@@ -154,7 +152,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.newCatName = null
           this.$store.commit('setUserData')
         })
@@ -182,11 +179,7 @@
       }
     },
     created () {
-      // this.getUserData()
-      console.log(this.$store)
-      this.$store.commit('setUserData')
-      // this.$router.go('/home')
-      console.log(this.$router, 'this router..........')
+      this.$store.commit('setLoginStatus')
       this.$router.push('/home')
     }
     

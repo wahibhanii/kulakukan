@@ -53,7 +53,6 @@
         this.$router.push('/content')
       },
       addList(newListName, catId) {
-        console.log (newListName, catId)
         let userId = jwt.decode(localStorage.token)._id
         this.$axios({
           method: 'post',
@@ -62,7 +61,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.$store.commit('setUserData')
           this.newListName = null
         })
@@ -71,7 +69,6 @@
         })
       },
       deleteList(catId, listId) {
-        console.log(catId, listId)
         let userId = jwt.decode(localStorage.token)._id
         this.$axios({
           method: 'put',
@@ -80,7 +77,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.$store.commit('setUserData')
         })
         .catch(err => {
@@ -96,7 +92,6 @@
           headers: {token: localStorage.token}
         })
         .then(response => {
-          console.log(response)
           this.$store.commit('setUserData')
         })
         .catch(err => {
